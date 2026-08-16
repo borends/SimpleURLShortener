@@ -4,19 +4,23 @@ from sqlalchemy import select
 
 from app.database import async_session_factory
 from app.models.link import Link
+from utils.base62 import encode
 
 
 async def make_short_link(url: str):
     async with async_session_factory() as session:
         new_link = Link(
             original_url=url,
-            short_code=secrets.token_urlsafe(5)[:5]
+            short_code="!",
         )
         session.add(new_link)
         await session.commit()
-
         await session.refresh(new_link)  # Обновляет объект новыми данными из БД
-        return {"short_link": new_link.short_code}
+        new_link.short_code = encode(new_link.id)
+        await session.commit()
+        await session.refresh(new_link)
+
+        return {"short_code": new_link.short_code}
 
 
 async def find_link(code: str) -> str:

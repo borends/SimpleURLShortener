@@ -9,5 +9,5 @@ class Link(Base):
     __tablename__ = "links"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    original_url: Mapped[str] = mapped_column(String)
-    short_code: Mapped[str] = mapped_column(String, unique=True)
+    original_url: Mapped[str]
+    short_code: Mapped[str | None] = mapped_column(unique=True, index=True)
