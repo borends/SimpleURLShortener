@@ -1,10 +1,8 @@
-import secrets
-
 from sqlalchemy import select
 
 from app.database import async_session_factory
 from app.models.link import Link
-from utils.base62 import encode
+from app.utils.base62 import encode
 
 
 async def make_short_link(url: str):
